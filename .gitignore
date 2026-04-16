@@ -1,0 +1,36 @@
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# Runtime and environment files
+.env
+.env.*
+*.pid
+*.seed
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Coverage and build output
+coverage/
+dist/
+build/
+tmp/
+temp/
+
+# Cache
+.cache/
+.eslintcache

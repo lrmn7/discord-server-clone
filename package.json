@@ -1,0 +1,33 @@
+{
+  "name": "discord-server-clone",
+  "version": "1.0.0",
+  "description": "A modular Discord server clone tool with a structured CLI codebase",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "clone": "node main.js"
+  },
+  "keywords": [
+    "discord",
+    "server",
+    "cloner",
+    "selfbot"
+  ],
+  "author": "lrmn7",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lrmn7/discord-server-clone"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "dependencies": {
+    "cli-progress": "^3.12.0",
+    "colors": "^1.4.0",
+    "discord.js-selfbot-v11": "^11.5.1",
+    "enquirer": "^2.3.6",
+    "figlet": "^1.7.0",
+    "gradient-string": "^2.0.2"
+  }
+}
