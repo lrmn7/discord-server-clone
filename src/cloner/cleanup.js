@@ -1,6 +1,6 @@
 const colors = require('colors');
 
-async function deleteGuildContent(guild, { log, createProgressBar, delay }) {
+async function deleteGuildContent(guild, { log, createProgressBar, delay }, ignoredChannels = []) {
     log(`Cleaning target server: ${colors.yellow(guild.name)}`, 'progress');
 
     const channels = guild.channels.array();
@@ -11,6 +11,10 @@ async function deleteGuildContent(guild, { log, createProgressBar, delay }) {
         channelBar.start(channels.length, 0);
 
         for (const channel of channels) {
+            if (ignoredChannels.includes(channel.id)) {
+                continue;
+            }
+
             try {
                 await channel.delete();
             } catch (error) {}

@@ -22,10 +22,19 @@ function createApp() {
     const client = new Client();
     const log = createLogger();
 
+    // Prevent library crashes from stopping the clone process
+    process.on('uncaughtException', (err) => {
+        if (err.message && err.message.includes('_cacheMessage')) {
+            // Ignore discord.js-selfbot-v11 cache error
+            return;
+        }
+        log(`Unhandled Exception: ${err.message}`, 'error');
+    });
+
     async function run() {
         try {
             const config = await getConfig(() => displayBanner(CONFIG), log);
-            const { token, original, target, cloneIcon, cloneName } = config;
+            const { token, original, target, cloneIcon, cloneName, ignoredChannels } = config;
 
             displayBanner(CONFIG);
             log('Connecting to Discord...', 'info');
@@ -50,7 +59,7 @@ function createApp() {
                 await cloneServer(
                     sourceGuild,
                     targetGuild,
-                    { cloneIcon, cloneName },
+                    { cloneIcon, cloneName, ignoredChannels },
                     {
                         config: CONFIG,
                         delay,

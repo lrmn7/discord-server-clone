@@ -12,7 +12,7 @@ async function cloneServer(source, target, options, context) {
     context.log(`Target: ${colors.yellow(target.name)} (${target.id})`, 'info');
     console.log('');
 
-    await deleteGuildContent(target, context);
+    await deleteGuildContent(target, context, options.ignoredChannels);
 
     if (options.cloneIcon && source.iconURL) {
         try {

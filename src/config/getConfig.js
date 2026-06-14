@@ -1,51 +1,38 @@
-const { prompt } = require('enquirer');
+require('dotenv').config();
 const colors = require('colors');
 
 async function getConfig(displayBanner, log) {
     displayBanner();
 
     try {
-        const config = await prompt([
-            {
-                type: 'password',
-                name: 'token',
-                message: colors.cyan('Enter your Discord token'),
-                validate: value => value.length > 50 ? true : 'Token seems too short. Please check again.'
-            },
-            {
-                type: 'input',
-                name: 'original',
-                message: colors.cyan('Enter the source server ID (to clone from)'),
-                validate: value => /^\d{17,19}$/.test(value) ? true : 'Invalid server ID format'
-            },
-            {
-                type: 'input',
-                name: 'target',
-                message: colors.cyan('Enter the target server ID (to clone to)'),
-                validate: value => /^\d{17,19}$/.test(value) ? true : 'Invalid server ID format'
-            },
-            {
-                type: 'confirm',
-                name: 'cloneIcon',
-                message: colors.cyan('Clone server icon?'),
-                initial: true
-            },
-            {
-                type: 'confirm',
-                name: 'cloneName',
-                message: colors.cyan('Clone server name?'),
-                initial: true
-            }
-        ]);
+        const token = process.env.DISCORD_TOKEN;
+        const original = process.env.SOURCE_SERVER_ID;
+        const target = process.env.TARGET_SERVER_ID;
+        
+        if (!token) throw new Error('DISCORD_TOKEN is missing in .env');
+        if (!original) throw new Error('SOURCE_SERVER_ID is missing in .env');
+        if (!target) throw new Error('TARGET_SERVER_ID is missing in .env');
+
+        const config = {
+            token,
+            original,
+            target,
+            cloneIcon: process.env.CLONE_ICON !== 'false', // Default true
+            cloneName: process.env.CLONE_NAME !== 'false', // Default true
+            ignoredChannels: process.env.IGNORED_CHANNELS || ''
+        };
+
+        if (config.ignoredChannels) {
+            config.ignoredChannels = config.ignoredChannels.split(',').map(id => id.trim()).filter(id => id);
+        } else {
+            config.ignoredChannels = [];
+        }
 
         return config;
     } catch (err) {
-        if (err.message && err.message.includes('cancelled')) {
-            log('Operation cancelled by user', 'warning');
-            process.exit(0);
-        }
-
-        throw err;
+        log(`Config Error: ${err.message}`, 'error');
+        log('Please make sure you have created a .env file based on .env.example', 'warning');
+        process.exit(1);
     }
 }
 
